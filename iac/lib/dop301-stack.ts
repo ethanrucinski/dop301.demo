@@ -1,5 +1,6 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { DockerImageCode, DockerImageFunction } from 'aws-cdk-lib/aws-lambda';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 
@@ -20,7 +21,16 @@ export class Dop301Stack extends Stack {
       stringValue: table.tableName
     })
 
-    
+    const getUsersFunction = new DockerImageFunction(this, "GetUsersFunction", {
+      code: DockerImageCode.fromImageAsset("../get-users"),
+      environment: {
+        TABLE_NAME: table.tableName
+      }
+    });
+
+    table.grantReadData(getUsersFunction);
+
+    getUsersFunction.addFunctionUrl();
 
   }
 }
