@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - main
-
 jobs:
     cdk-deploy:
         runs-on: ubuntu-latest
@@ -17,15 +16,21 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v1.6.1
               with:
                   role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NUMBER }}:role/Github-Actions-Role-${{ secrets.AWS_ACCOUNT_NUMBER }}
-                  aws-region: us-east-2
+                  aws-region: us-east-1
             - name: Checkout Source
               uses: actions/checkout@v3
-            - name: CDK Diff
-              uses: youyo/aws-cdk-github-actions@v2
+            - name: Setup Node
+              uses: actions/setup-node@v3
               with:
-                  cdk_subcommand: "deploy"
-                  actions_comment: true
-                  working_dir: iac
-              env:
-                  AWS_DEFAULT_REGION: "us-east-2"
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                node-version: 16
+            - name: Install AWS CDK
+              run: |
+                npm install -g aws-cdk
+              shell: bash
+            - name: CDK Build and Deploy
+              run: |
+                npm install
+                cdk diff
+                cdk deploy
+              shell: bash
+              working-directory: iac
