@@ -20,13 +20,15 @@ jobs:
                   aws-region: us-east-1
             - name: Checkout Source
               uses: actions/checkout@v3
-            - name: CDK Deploy
-              uses: youyo/aws-cdk-github-actions@v2
-              with:
-                  cdk_subcommand: "deploy"
-                  cdk_args: '--require-approval never'
-                  actions_comment: true
-                  working_dir: iac
-              env:
-                  AWS_DEFAULT_REGION: "us-east-1"
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Setup Node
+              uses: actions/setup-node@v3
+            - name: Install AWS CDK
+              run: |
+                npm install -g aws-cdk
+              shell: bash
+            - name: CDK Build and Deploy
+              run: |
+                npm install
+                cdk deploy
+              shell: bash
+              working-directory: iac
