@@ -17,7 +17,7 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v1.6.1
               with:
                   role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NUMBER }}:role/Github-Actions-Role-${{ secrets.AWS_ACCOUNT_NUMBER }}
-                  aws-region: us-east-2
+                  aws-region: us-east-1
             - name: Checkout Source
               uses: actions/checkout@v3
             - name: CDK Deploy
@@ -28,5 +28,5 @@ jobs:
                   actions_comment: true
                   working_dir: iac
               env:
-                  AWS_DEFAULT_REGION: "us-east-2"
+                  AWS_DEFAULT_REGION: "us-east-1"
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
