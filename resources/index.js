@@ -5,7 +5,6 @@ const {
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
 
 async function main() {
-    process.env.AWS_PROFILE = "dop";
 
     // Get table name
     const clientSSM = new SSMClient();
