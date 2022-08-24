@@ -9,31 +9,5 @@ export class Dop301Stack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const table = new Table(this, "Table", {
-      partitionKey: {
-        name: "UserName",
-        type: AttributeType.STRING
-      },
-      removalPolicy: RemovalPolicy.DESTROY
-    })
-
-    new StringParameter(this, "TableName", {
-      parameterName: "TableName",
-      stringValue: table.tableName
-    })
-
-    const getUsersFunction = new DockerImageFunction(this, "GetUsersFunction", {
-      code: DockerImageCode.fromImageAsset("../get-users"),
-      environment: {
-        TABLE_NAME: table.tableName
-      }
-    })
-
-    table.grantReadData(getUsersFunction)
-
-    getUsersFunction.addFunctionUrl({
-      authType: FunctionUrlAuthType.NONE
-    })
-
   }
 }
