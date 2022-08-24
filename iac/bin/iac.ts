@@ -7,6 +7,6 @@ const app = new cdk.App();
 new Dop301Stack(app, "dop301-stack", {
     env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: "us-east-1",
+        region: "us-east-2",
     },
 });
